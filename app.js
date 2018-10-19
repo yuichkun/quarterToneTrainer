@@ -37,5 +37,14 @@ function playNote(synth, noteNum) {
 }
 
 function pickRndNotes(noteCount) {
-  return Array.from({ length: noteCount }, () => Math.floor(Math.random() * NOTES_RANGE));
+  let notes = [];
+  while (notes.length < noteCount) {
+    const candidate = Math.floor(Math.random() * NOTES_RANGE);
+    const noteIsUnique = !notes.includes(candidate);
+    if (noteIsUnique) {
+      notes.push(candidate);
+    }
+  }
+  const sorted = notes.sort((a,b)=> a-b);
+  return sorted;
 }
