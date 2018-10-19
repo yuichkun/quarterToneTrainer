@@ -1,19 +1,26 @@
 let MAX_INSTS = 10;
 let NOTES_RANGE = 39;
-let LEVEL = 3;
 $(document).ready(function () {
+  // init
   const synths = Array.from({ length: MAX_INSTS }, createSynth);
+  window.level = 3;
+  const levelSlider = createLevelSlider();
+
   const wrapper = $('#wrapper');
+  const playButton = $('#play');
+  const nextButton = $('#next');
+
   function quiz() {
     wrapper.empty();
-    let notes = pickRndNotes(LEVEL);
+    let notes = pickRndNotes();
     notes.forEach((note, i) => {
       const synth = synths[i];
       playNote(synth, note);
       addImage(wrapper, note);
     });
   }
-  $(document).click(quiz);
+  $(nextButton).click(quiz);
+  $(playButton).click()
 });
 
 function createSynth() {
@@ -22,6 +29,19 @@ function createSynth() {
       "type": "sine"
     }
   }).toMaster();
+}
+function createLevelSlider() {
+  const levelSlider = $(`<input type="range" value=${window.level} min="1" max=${MAX_INSTS} id="level"></input>`);
+  const label = $(`<span id="label">${window.level}</span>`);
+  const controls = $('#controls');
+  levelSlider.prependTo(controls);
+  label.prependTo(controls);
+  levelSlider.change(e => {
+    const val = e.target.value;
+    label.html(val);
+    window.level = val;
+  });
+  return levelSlider;
 }
 
 function addImage(wrapper, num) {
@@ -36,7 +56,8 @@ function playNote(synth, noteNum) {
   synth.triggerAttackRelease(freq, "2");
 }
 
-function pickRndNotes(noteCount) {
+function pickRndNotes() {
+  const noteCount = window.level;
   let notes = [];
   while (notes.length < noteCount) {
     const candidate = Math.floor(Math.random() * NOTES_RANGE);
