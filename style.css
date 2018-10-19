@@ -6,3 +6,7 @@ body {
 .score {
   width: 30vw;
 }
+
+.hide {
+  visibility: hidden;
+}

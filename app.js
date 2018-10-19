@@ -4,23 +4,39 @@ $(document).ready(function () {
   // init
   const synths = Array.from({ length: MAX_INSTS }, createSynth);
   window.level = 3;
+  let notes = [];
   const levelSlider = createLevelSlider();
 
   const wrapper = $('#wrapper');
   const playButton = $('#play');
   const nextButton = $('#next');
+  const showButton = $('#show');
 
-  function quiz() {
-    wrapper.empty();
-    let notes = pickRndNotes();
+  function playAll(notes) {
     notes.forEach((note, i) => {
       const synth = synths[i];
       playNote(synth, note);
+    });
+  }
+  function showAll(notes) {
+    notes.forEach((note, i) => {
       addImage(wrapper, note);
     });
   }
+
+  function quiz() {
+    wrapper.empty();
+    notes = pickRndNotes();
+    showAll(notes);
+    wrapper.addClass('hide');
+    playAll(notes);
+  }
+
   $(nextButton).click(quiz);
-  $(playButton).click()
+  $(playButton).click(()=>playAll(notes));
+  $(showButton).click(() => {
+    wrapper.toggleClass('hide');
+  })
 });
 
 function createSynth() {
@@ -32,10 +48,12 @@ function createSynth() {
 }
 function createLevelSlider() {
   const levelSlider = $(`<input type="range" value=${window.level} min="1" max=${MAX_INSTS} id="level"></input>`);
+  const labelWrapper = $('<div>Level: </div>');
   const label = $(`<span id="label">${window.level}</span>`);
   const controls = $('#controls');
   levelSlider.prependTo(controls);
-  label.prependTo(controls);
+  labelWrapper.prependTo(controls);
+  label.appendTo(labelWrapper);
   levelSlider.change(e => {
     const val = e.target.value;
     label.html(val);
