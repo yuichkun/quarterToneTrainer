@@ -26,6 +26,8 @@ $(document).ready(function () {
 
   function quiz() {
     wrapper.empty();
+    const span = $('<div>Click on each image to play the individial note</div>');
+    span.appendTo(wrapper);
     notes = pickRndNotes();
     showAll(notes);
     wrapper.addClass('hide');
@@ -65,13 +67,15 @@ function createLevelSlider() {
 function addImage(wrapper, num) {
   const img = $('<img class="score">')
   img.attr('src', `assets/${num}.png`);
+  img.attr('onclick', `playNote(Array.from({ length: 1 }, createSynth)[0], ${num}, 1)`)
   img.appendTo(wrapper);
 }
 
-function playNote(synth, noteNum) {
+function playNote(synth, noteNum, length) {
+  length = length || "2";
   const midiNum = (noteNum / 2) + 60;
   const freq = Tone.Midi(midiNum).toFrequency();
-  synth.triggerAttackRelease(freq, "2");
+  synth.triggerAttackRelease(freq, length);
 }
 
 function pickRndNotes() {
