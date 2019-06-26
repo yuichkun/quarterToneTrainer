@@ -26,7 +26,7 @@ $(document).ready(function () {
 
   function quiz() {
     wrapper.empty();
-    const span = $('<div>Click on each image to play the individial note</div>');
+    const span = $('<div>Click on each image to play the individual note</div>');
     span.appendTo(wrapper);
     notes = pickRndNotes();
     showAll(notes);
